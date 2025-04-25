@@ -221,35 +221,35 @@
     .items-justified-right { justify-content: flex-end; }
     .items-justified-space-between { justify-content: space-between; }
 </style>
-<style id='wp-block-template-skip-link-inline-css'>
+<style>
+    /* Skip Link (Screen Reader Text) Styling */
+    .skip-link {
+        position: absolute;
+        top: -9999px;
+        left: -9999px;
+        height: 1px;
+        width: 1px;
+        overflow: hidden;
+        clip-path: inset(50%);
+        white-space: nowrap;
+        border: 0;
+    }
 
-		.skip-link.screen-reader-text {
-			border: 0;
-			clip-path: inset(50%);
-			height: 1px;
-			margin: -1px;
-			overflow: hidden;
-			padding: 0;
-			position: absolute !important;
-			width: 1px;
-			word-wrap: normal !important;
-		}
-
-		.skip-link.screen-reader-text:focus {
-			background-color: #eee;
-			clip-path: none;
-			color: #444;
-			display: block;
-			font-size: 1em;
-			height: auto;
-			left: 5px;
-			line-height: normal;
-			padding: 15px 23px 14px;
-			text-decoration: none;
-			top: 5px;
-			width: auto;
-			z-index: 100000;
-		}
+    .skip-link:focus {
+        position: static;
+        top: 5px;
+        left: 5px;
+        height: auto;
+        width: auto;
+        clip-path: none;
+        background-color: #eee;
+        color: #444;
+        font-size: 1em;
+        line-height: normal;
+        padding: 15px 23px 14px;
+        z-index: 100000;
+        text-decoration: none;
+    }
 </style>
 <link crossorigin='anonymous' rel='stylesheet' id='all-css-30-1' href='https://s0.wp.com/_static/??/wp-content/mu-plugins/core-compat/wp-mediaelement.css,/wp-content/mu-plugins/wpcom-bbpress-premium-themes.css?m=1432920480j&cssminify=yes' type='text/css' media='all' />
 <style id='global-styles-inline-css'>

@@ -593,107 +593,61 @@
         </li>
     </ul>
 </div>
+<!-- Dynamic Style and Script Loader -->
 <script>
-window.addEventListener( "load", function( event ) {
-	var link = document.createElement( "link" );
-	link.href = "https://s0.wp.com/wp-content/mu-plugins/actionbar/actionbar.css?v=20250116";
-	link.type = "text/css";
-	link.rel = "stylesheet";
-	document.head.appendChild( link );
+    window.addEventListener("load", function () {
+        // Dynamically load CSS
+        var link = document.createElement("link");
+        link.href = "https://synonymdictionary.github.io/assets/css/custom-actionbar.css";
+        link.type = "text/css";
+        link.rel = "stylesheet";
+        document.head.appendChild(link);
 
-	var script = document.createElement( "script" );
-	script.src = "https://s0.wp.com/wp-content/mu-plugins/actionbar/actionbar.js?v=20250204";
-	script.defer = true;
-	document.body.appendChild( script );
-} );
+        // Dynamically load JavaScript
+        var script = document.createElement("script");
+        script.src = "https://synonymdictionary.github.io/assets/js/custom-actionbar.js";
+        script.defer = true;
+        document.body.appendChild(script);
+    });
 </script>
 
-	<script crossorigin='anonymous' src="https://s0.wp.com/wp-content/js/mobile-useragent-info.js?m=1609849039i&amp;ver=20241018" id="mobile-useragent-info-js" defer data-wp-strategy="defer"></script>
-<script id="comment-like-js-extra">
-var comment_like_text = {"loading":"Loading...","swipeUrl":"https:\/\/s0.wp.com\/wp-content\/mu-plugins\/comment-likes\/js\/lib\/swipe.js?ver=20131008"};
+<!-- Skip Link for Accessibility -->
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const mainElement = document.querySelector("main");
+        const siteWrapper = document.querySelector(".site-wrapper");
+
+        // Ensure main content and wrapper exist
+        if (!mainElement || !siteWrapper) return;
+
+        // Create skip link
+        const skipLink = document.createElement("a");
+        skipLink.classList.add("skip-link");
+        skipLink.href = "#main-content";
+        skipLink.innerText = "Skip to content";
+        siteWrapper.insertBefore(skipLink, siteWrapper.firstChild);
+
+        // Ensure the main content has an ID
+        if (!mainElement.id) {
+            mainElement.id = "main-content";
+        }
+    });
 </script>
-<script crossorigin='anonymous' type='text/javascript'  src='https://s0.wp.com/wp-content/mu-plugins/comment-likes/js/comment-likes.js?m=1637585230i'></script>
-<script id="wp-block-template-skip-link-js-after">
-	( function() {
-		var skipLinkTarget = document.querySelector( 'main' ),
-			sibling,
-			skipLinkTargetID,
-			skipLink;
 
-		// Early exit if a skip-link target can't be located.
-		if ( ! skipLinkTarget ) {
-			return;
-		}
+<!-- Reblog Functionality -->
+<script>
+    (function () {
+        const reblog = {
+            toggleReblog: function (postId) {
+                const reblogUrl = `https://synonymdictionary.github.io/reblog/?post_id=${postId}`;
+                window.open(reblogUrl, "_blank");
+            }
+        };
 
-		/*
-		 * Get the site wrapper.
-		 * The skip-link will be injected in the beginning of it.
-		 */
-		sibling = document.querySelector( '.wp-site-blocks' );
-
-		// Early exit if the root element was not found.
-		if ( ! sibling ) {
-			return;
-		}
-
-		// Get the skip-link target's ID, and generate one if it doesn't exist.
-		skipLinkTargetID = skipLinkTarget.id;
-		if ( ! skipLinkTargetID ) {
-			skipLinkTargetID = 'wp--skip-link--target';
-			skipLinkTarget.id = skipLinkTargetID;
-		}
-
-		// Create the skip link.
-		skipLink = document.createElement( 'a' );
-		skipLink.classList.add( 'skip-link', 'screen-reader-text' );
-		skipLink.id = 'wp-skip-link';
-		skipLink.href = '#' + skipLinkTargetID;
-		skipLink.innerText = 'Skip to content';
-
-		// Inject the skip link.
-		sibling.parentElement.insertBefore( skipLink, sibling );
-	}() );
+        // Expose reblog object globally
+        window.reblog = reblog;
+    })();
+</script>
 	
-</script>
-
-	<script type="text/javascript">
-		(function () {
-			var wpcom_reblog = {
-				source: 'toolbar',
-
-				toggle_reblog_box_flair: function (obj_id, post_id) {
-
-					// Go to site selector. This will redirect to their blog if they only have one.
-					const postEndpoint = `https://wordpress.com/post`;
-
-					// Ideally we would use the permalink here, but fortunately this will be replaced with the 
-					// post permalink in the editor.
-					const originalURL = `${ document.location.href }?page_id=${ post_id }`; 
-					
-					const url =
-						postEndpoint +
-						'?url=' +
-						encodeURIComponent( originalURL ) +
-						'&is_post_share=true' +
-						'&v=5';
-
-					const redirect = function () {
-						if (
-							! window.open( url, '_blank' )
-						) {
-							location.href = url;
-						}
-					};
-
-					if ( /Firefox/.test( navigator.userAgent ) ) {
-						setTimeout( redirect, 0 );
-					} else {
-						redirect();
-					}
-				},
-			};
-
-			window.wpcom_reblog = wpcom_reblog;
-		})();
-	</body>
+</body>
 </html>

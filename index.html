@@ -341,69 +341,64 @@
         text-decoration: none;
     }
 </style>
-<style id='core-block-supports-inline-css'>
-.wp-container-core-group-is-layout-d275371d{gap:var(--wp--preset--spacing--30);flex-direction:column;align-items:stretch;}.wp-container-core-group-is-layout-cb46ffcb{flex-wrap:nowrap;justify-content:space-between;}
-</style>
-<link crossorigin='anonymous' rel='stylesheet' id='all-css-34-1' href='https://s0.wp.com/_static/??/wp-content/mu-plugins/comment-likes/css/comment-likes.css,/i/noticons/noticons.css,/wp-content/themes/pub/lowfi/style.css?m=1712745615j&cssminify=yes' type='text/css' media='all' />
-<style id='akismet-widget-style-inline-css'>
+<style>
+    /* Button Layouts */
+    .container-group {
+        display: flex;
+        flex-wrap: wrap; /* Updated for generic layout usage */
+        gap: var(--spacing-30);
+    }
+    .container-group-column {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .container-group-row {
+        flex-wrap: nowrap;
+        justify-content: space-between;
+    }
 
-			.a-stats {
-				--akismet-color-mid-green: #357b49;
-				--akismet-color-white: #fff;
-				--akismet-color-light-grey: #f6f7f7;
+    /* Akismet Widget */
+    .stats-widget {
+        --color-mid-green: #357b49;
+        --color-white: #fff;
+        --color-light-grey: #f6f7f7;
 
-				max-width: 350px;
-				width: auto;
-			}
-
-			.a-stats * {
-				all: unset;
-				box-sizing: border-box;
-			}
-
-			.a-stats strong {
-				font-weight: 600;
-			}
-
-			.a-stats a.a-stats__link,
-			.a-stats a.a-stats__link:visited,
-			.a-stats a.a-stats__link:active {
-				background: var(--akismet-color-mid-green);
-				border: none;
-				box-shadow: none;
-				border-radius: 8px;
-				color: var(--akismet-color-white);
-				cursor: pointer;
-				display: block;
-				font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen-Sans', 'Ubuntu', 'Cantarell', 'Helvetica Neue', sans-serif;
-				font-weight: 500;
-				padding: 12px;
-				text-align: center;
-				text-decoration: none;
-				transition: all 0.2s ease;
-			}
-
-			/* Extra specificity to deal with TwentyTwentyOne focus style */
-			.widget .a-stats a.a-stats__link:focus {
-				background: var(--akismet-color-mid-green);
-				color: var(--akismet-color-white);
-				text-decoration: none;
-			}
-
-			.a-stats a.a-stats__link:hover {
-				filter: brightness(110%);
-				box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06), 0 0 2px rgba(0, 0, 0, 0.16);
-			}
-
-			.a-stats .count {
-				color: var(--akismet-color-white);
-				display: block;
-				font-size: 1.5em;
-				line-height: 1.4;
-				padding: 0 13px;
-				white-space: nowrap;
-			}
-		
+        max-width: 350px;
+        width: auto;
+    }
+    .stats-widget * {
+        all: unset;
+        box-sizing: border-box;
+    }
+    .stats-widget strong {
+        font-weight: bold;
+    }
+    .stats-widget a,
+    .stats-widget a:visited,
+    .stats-widget a:active {
+        background: var(--color-mid-green);
+        border: none;
+        border-radius: 8px;
+        color: var(--color-white);
+        cursor: pointer;
+        display: block;
+        padding: 12px;
+        text-align: center;
+        text-decoration: none;
+        transition: 0.2s ease;
+    }
+    .stats-widget a:hover {
+        filter: brightness(110%);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06), 0 0 2px rgba(0, 0, 0, 0.16);
+    }
+    .stats-widget .count {
+        color: var(--color-white);
+        font-size: 1.5em;
+        line-height: 1.4;
+        text-align: center;
+        padding: 0 13px;
+        white-space: nowrap;
+    }
 </style>
 <link crossorigin='anonymous' rel='stylesheet' id='all-css-36-1' href='https://s0.wp.com/_static/??-eJzTLy/QTc7PK0nNK9HPLdUtyClNz8wr1i9KTcrJTwcy0/WTi5G5ekCujj52Temp+bo5+cmJJZn5eSgc3bScxMwikFb7XFtDE1NLExMLc0OTLACohS2q&cssminify=yes' type='text/css' media='all' />
 <style id='jetpack-global-styles-frontend-style-inline-css'>

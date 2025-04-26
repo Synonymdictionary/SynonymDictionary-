@@ -400,21 +400,75 @@
         white-space: nowrap;
     }
 </style>
-<link crossorigin='anonymous' rel='stylesheet' id='all-css-36-1' href='https://s0.wp.com/_static/??-eJzTLy/QTc7PK0nNK9HPLdUtyClNz8wr1i9KTcrJTwcy0/WTi5G5ekCujj52Temp+bo5+cmJJZn5eSgc3bScxMwikFb7XFtDE1NLExMLc0OTLACohS2q&cssminify=yes' type='text/css' media='all' />
-<style id='jetpack-global-styles-frontend-style-inline-css'>
-:root { --font-headings: unset; --font-base: unset; --font-headings-default: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif; --font-base-default: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif;}
+<style>
+    /* Fonts */
+    :root {
+        --font-headings: "Josefin Sans", sans-serif;
+        --font-base: "Inter", sans-serif;
+    }
+
+    body {
+        font-family: var(--font-base);
+        margin: 0;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+        font-family: var(--font-headings);
+    }
+
+    /* Container Layouts */
+    .container-group {
+        gap: 0.75rem; /* Matches spacing preset */
+        display: flex;
+    }
+
+    .container-group-column {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .container-group-row {
+        flex-wrap: nowrap;
+        justify-content: space-between;
+    }
+
+    /* Widget Styling */
+    .stats-widget {
+        --color-mid-green: #357b49;
+        --color-white: #fff;
+        --color-light-grey: #f6f7f7;
+
+        max-width: 350px;
+        width: auto;
+    }
+
+    .stats-widget * {
+        box-sizing: border-box;
+        margin: 0; /* Ensures clean layout */
+    }
+
+    .stats-widget a {
+        background: var(--color-mid-green);
+        border-radius: 8px;
+        color: var(--color-white);
+        display: inline-block;
+        padding: 12px;
+        text-align: center;
+        text-decoration: none;
+        transition: 0.2s ease-in-out;
+    }
+
+    .stats-widget a:hover {
+        filter: brightness(110%);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06), 0 0 2px rgba(0, 0, 0, 0.16);
+    }
+
+    .stats-widget .count {
+        font-size: 1.5rem;
+        line-height: 1.4;
+        text-align: center;
+    }
 </style>
-<link crossorigin='anonymous' rel='stylesheet' id='all-css-38-1' href='https://s0.wp.com/wp-content/themes/h4/global.css?m=1420737423i&cssminify=yes' type='text/css' media='all' />
-<script id="wpcom-actionbar-placeholder-js-extra">
-var actionbardata = {"siteID":"243879212","postID":"37","siteURL":"http:\/\/synonym55.wordpress.com","xhrURL":"https:\/\/synonym55.wordpress.com\/wp-admin\/admin-ajax.php","nonce":"286ced6030","isLoggedIn":"","statusMessage":"","subsEmailDefault":"instantly","proxyScriptUrl":"https:\/\/s0.wp.com\/wp-content\/js\/wpcom-proxy-request.js?ver=20211021","shortlink":"https:\/\/wp.me\/Pgvi7G-B","i18n":{"followedText":"New posts from this site will now appear in your <a href=\"https:\/\/wordpress.com\/reader\">Reader<\/a>","foldBar":"Collapse this bar","unfoldBar":"Expand this bar","shortLinkCopied":"Shortlink copied to clipboard."}};
-</script>
-<script id="jetpack-mu-wpcom-settings-js-before">
-var JETPACK_MU_WPCOM_SETTINGS = {"assetsUrl":"https:\/\/s0.wp.com\/wp-content\/mu-plugins\/jetpack-mu-wpcom-plugin\/sun\/jetpack_vendor\/automattic\/jetpack-mu-wpcom\/src\/build\/"};
-</script>
-<script crossorigin='anonymous' type='text/javascript'  src='https://s0.wp.com/wp-content/js/rlt-proxy.js?m=1720530689i'></script>
-<script id="rlt-proxy-js-after">
-	rltInitialize( {"token":null,"iframeOrigins":["https:\/\/widgets.wp.com"]} );
-</script>
 <link rel="canonical" href="https://synonymdictionary.github.io/SynonymDictionary-/" />
 <!-- Updated Open Graph Tags -->
 <meta property="og:type" content="website" />

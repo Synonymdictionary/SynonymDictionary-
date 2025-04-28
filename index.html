@@ -9,10 +9,10 @@
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f9f4d7; /* Pale yellow background */
-            background-image: url('https://s0.wp.com/wp-content/themes/pub/lowfi/assets/images/texture.png'); /* Background texture */
+            background-color: #f9f4d7; /* Pale yellow */
+            background-image: url('https://s0.wp.com/wp-content/themes/pub/lowfi/assets/images/texture.png'); /* Texture */
             background-repeat: repeat;
-            color: #5c7067; /* Pale greenish-grey text */
+            color: #5c7067; /* Pale greenish-grey */
         }
 
         header {
@@ -30,11 +30,6 @@
         header h1 {
             font-size: 2.5rem;
             margin: 0.5rem 0;
-        }
-
-        header p {
-            font-size: 1rem;
-            margin: 0.5rem 0 1.5rem 0;
         }
 
         main {
@@ -56,11 +51,27 @@
             border-radius: 4px;
         }
 
-        footer {
-            background-color: #5c7067; /* Pale greenish-grey footer */
-            color: #f9f4d7; /* Pale yellow text */
-            text-align: center;
-            padding: 1rem 0;
+        .search-bar button {
+            padding: 0.5rem 1rem;
+            font-size: 1rem;
+            border: none;
+            border-radius: 5px;
+            background: #007cba;
+            color: white;
+            cursor: pointer;
+        }
+
+        .results {
+            margin-top: 2rem;
+            background-color: #e9edd9; /* Slightly lighter greenish-grey */
+            padding: 1.5rem;
+            border-radius: 8px;
+        }
+
+        .results img {
+            margin-top: 1rem;
+            max-width: 100%;
+            border-radius: 10px;
         }
     </style>
 </head>
@@ -72,11 +83,49 @@
     </header>
     <main>
         <div class="search-bar">
-            <input type="text" placeholder="Search for synonyms...">
+            <input type="text" id="searchInput" placeholder="Search for a word...">
+            <button onclick="searchWord()">Search</button>
+        </div>
+        <div id="results" class="results" style="display: none;">
+            <h2 id="wordTitle"></h2>
+            <p id="synonyms"></p>
+            <img id="wordImage" alt="">
         </div>
     </main>
-    <footer>
-        <p>&copy; 2025 Synonym Dictionary. All rights reserved.</p>
-    </footer>
+    <script>
+        const glossary = {
+            "hate": {
+                synonyms: ["dislike", "loathe", "despise"],
+                image: "https://your-repo-url/hate.jpg" // Replace with your image file URL
+            },
+            "love": {
+                synonyms: ["affection", "adore", "cherish"],
+                image: "https://your-repo-url/love.jpg" // Replace with your image file URL
+            }
+            // Add more words here
+        };
+
+        function searchWord() {
+            const query = document.getElementById("searchInput").value.toLowerCase();
+            const resultsDiv = document.getElementById("results");
+            const wordTitle = document.getElementById("wordTitle");
+            const synonyms = document.getElementById("synonyms");
+            const wordImage = document.getElementById("wordImage");
+
+            if (glossary[query]) {
+                const wordData = glossary[query];
+                wordTitle.textContent = query.charAt(0).toUpperCase() + query.slice(1);
+                synonyms.textContent = `Synonyms: ${wordData.synonyms.join(", ")}`;
+                wordImage.src = wordData.image;
+                wordImage.style.display = "block";
+                resultsDiv.style.display = "block";
+            } else {
+                wordTitle.textContent = "Word not found!";
+                synonyms.textContent = "";
+                wordImage.style.display = "none";
+                resultsDiv.style.display = "block";
+            }
+        }
+    </script>
 </body>
 </html>

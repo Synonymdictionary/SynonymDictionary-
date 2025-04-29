@@ -56,22 +56,8 @@
             padding: 0.5rem;
             font-size: 1.2rem;
             border: none;
-            background: transparent;
-            cursor: pointer;
-            color: #5c7067;
-        }
-
-        .filter-buttons {
-            margin: 1rem 0;
-        }
-
-        .filter-buttons button {
-            margin: 0.3rem;
-            padding: 0.5rem 1rem;
-            font-size: 0.9rem;
-            border: none;
             border-radius: 5px;
-            background: #5c7067;
+            background-color: #007cba;
             color: white;
             cursor: pointer;
         }
@@ -81,6 +67,11 @@
             background-color: #e9edd9; /* Slightly lighter greenish-grey */
             padding: 1.5rem;
             border-radius: 8px;
+            text-align: left;
+        }
+
+        .results h2 {
+            text-align: center;
         }
 
         .results img {
@@ -96,35 +87,32 @@
         }
     </style>
     <script>
-        async function searchWord(query, pos = "") {
+        async function searchWord() {
+            const query = document.getElementById("searchInput").value.trim().toLowerCase();
             const headerImage = document.getElementById("headerImage");
             const resultsDiv = document.getElementById("results");
             const wordTitle = document.getElementById("wordTitle");
-            const synonyms = document.getElementById("synonyms");
+            const synonymsSection = document.getElementById("synonymsSection");
             const wordImage = document.getElementById("wordImage");
             const attribution = document.getElementById("attribution");
-            const filterButtons = document.getElementById("filterButtons");
+
+            synonymsSection.innerHTML = ""; // Clear previous results
 
             try {
-                // Guess part of speech or refine based on user input (pos)
-                const synonymResponse = await fetch(`https://api.datamuse.com/words?${pos}=${query}`);
-                if (!synonymResponse.ok) throw new Error("Word not found");
-                const synonymData = await synonymResponse.json();
+                // Fetch synonyms grouped by part of speech from Datamuse API
+                const partsOfSpeech = { rel_jjb: "Adjectives", rel_jja: "Nouns", rel_syn: "Verbs" }; // Example POS mapping
+                for (const [pos, label] of Object.entries(partsOfSpeech)) {
+                    const synonymResponse = await fetch(`https://api.datamuse.com/words?${pos}=${query}`);
+                    if (!synonymResponse.ok) throw new Error("Word not found");
+                    const synonymData = await synonymResponse.json();
 
-                // Ensure synonyms are available
-                const synonymList = synonymData.map(item => item.word);
-                if (synonymList.length > 0) {
-                    synonyms.textContent = `Synonyms: ${synonymList.join(", ")}`;
-                } else {
-                    synonyms.textContent = "No synonyms available.";
+                    const synonymList = synonymData.map(item => item.word).join(", ");
+                    if (synonymList.length > 0) {
+                        const section = document.createElement("p");
+                        section.innerHTML = `<b>${label}:</b> ${synonymList}`;
+                        synonymsSection.appendChild(section);
+                    }
                 }
-
-                // Show part-of-speech buttons dynamically
-                filterButtons.innerHTML = `
-                    <button onclick="searchWord('${query}', 'rel_jjb')">Adjectives</button>
-                    <button onclick="searchWord('${query}', 'rel_jja')">Nouns</button>
-                    <button onclick="searchWord('${query}', 'rel_syn')">Verbs</button>
-                `;
 
                 // Fetch relevant image from Unsplash API
                 const unsplashKey = 'nGtdWs1N2VxtT-gXyJ7PsnMHDD2xvafoBGmT0-QFBgA'; // Your Unsplash API key
@@ -152,10 +140,9 @@
                 resultsDiv.style.display = "block";
             } catch (error) {
                 wordTitle.textContent = "Word not found!";
-                synonyms.textContent = "";
+                synonymsSection.textContent = "No synonyms available.";
                 wordImage.style.display = "none";
                 attribution.style.display = "none";
-                filterButtons.innerHTML = "";
                 resultsDiv.style.display = "block";
             }
         }
@@ -165,17 +152,16 @@
     <header>
         <img id="headerImage" src="https://synonym55.wordpress.com/wp-content/uploads/2025/04/img-20250425-wa0007_transformed-1.jpeg" alt="Site Logo">
         <h1>Synonym Dictionary</h1>
-        <p>Find synonyms of words with pictures as reference</p>
+        <p>Find Synonyms, Similar Words, and Pictures as Reference</p>
     </header>
     <main>
         <div class="search-bar">
             <input type="text" id="searchInput" placeholder="Search for a word...">
-            <button onclick="searchWord(document.getElementById('searchInput').value)">&#128269;</button> <!-- Search Icon -->
+            <button onclick="searchWord()">🔍</button>
         </div>
-        <div class="filter-buttons" id="filterButtons"></div>
         <div id="results" class="results" style="display: none;">
             <h2 id="wordTitle"></h2>
-            <p id="synonyms"></p>
+            <div id="synonymsSection"></div>
             <img id="wordImage" alt="">
             <p id="attribution"></p>
         </div>

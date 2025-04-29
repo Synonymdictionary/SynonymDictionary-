@@ -67,10 +67,9 @@
             justify-content: center;
         }
 
-        .search-bar button::before {
-            content: "🔍"; /* Cleaner, modern magnifying glass icon */
-            font-size: 1.2rem;
-            margin-right: 0.3rem;
+        .search-bar button img {
+            width: 20px;
+            height: 20px;
         }
 
         .results {
@@ -150,7 +149,9 @@
     <main>
         <div class="search-bar">
             <input type="text" id="searchInput" placeholder="Search for a word...">
-            <button onclick="searchWord()"></button>
+            <button onclick="searchWord()">
+                <img src="your-uploaded-icon.png" alt="Search Icon">
+            </button>
         </div>
         <div id="results" class="results" style="display: none;">
             <h2 id="wordTitle"></h2>

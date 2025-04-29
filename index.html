@@ -40,6 +40,8 @@
 
         .search-bar {
             margin-bottom: 1.5rem;
+            display: flex;
+            justify-content: center;
         }
 
         .search-bar input {
@@ -56,10 +58,19 @@
             padding: 0.5rem;
             font-size: 1.2rem;
             border: none;
-            border-radius: 5px;
-            background-color: #007cba;
+            border-radius: 10px; /* Curved edges */
+            background-color: #007cba; /* Contrasting block color */
             color: white;
             cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .search-bar button::before {
+            content: "🔎"; /* Cleaner magnifying glass icon */
+            font-size: 1.2rem;
+            margin-right: 0.3rem;
         }
 
         .results {
@@ -92,32 +103,15 @@
             const headerImage = document.getElementById("headerImage");
             const resultsDiv = document.getElementById("results");
             const wordTitle = document.getElementById("wordTitle");
-            const synonymsSection = document.getElementById("synonymsSection");
             const wordImage = document.getElementById("wordImage");
             const attribution = document.getElementById("attribution");
 
-            synonymsSection.innerHTML = ""; // Clear previous results
-
             try {
-                // Fetch synonyms grouped by part of speech from Datamuse API
-                const partsOfSpeech = { rel_jjb: "Adjectives", rel_jja: "Nouns", rel_syn: "Verbs" }; // Example POS mapping
-                for (const [pos, label] of Object.entries(partsOfSpeech)) {
-                    const synonymResponse = await fetch(`https://api.datamuse.com/words?${pos}=${query}`);
-                    if (!synonymResponse.ok) throw new Error("Word not found");
-                    const synonymData = await synonymResponse.json();
-
-                    const synonymList = synonymData.map(item => item.word).join(", ");
-                    if (synonymList.length > 0) {
-                        const section = document.createElement("p");
-                        section.innerHTML = `<b>${label}:</b> ${synonymList}`;
-                        synonymsSection.appendChild(section);
-                    }
-                }
-
-                // Fetch relevant image from Unsplash API
+                // Fetch relevant image from Unsplash API with improved query
                 const unsplashKey = 'nGtdWs1N2VxtT-gXyJ7PsnMHDD2xvafoBGmT0-QFBgA'; // Your Unsplash API key
-                const imageResponse = await fetch(`https://api.unsplash.com/search/photos?query=${query}&client_id=${unsplashKey}`);
+                const imageResponse = await fetch(`https://api.unsplash.com/search/photos?query=${query}+context&client_id=${unsplashKey}`);
                 const imageData = await imageResponse.json();
+
                 if (imageData.results.length > 0) {
                     const newImage = imageData.results[0];
                     wordImage.src = newImage.urls.small;
@@ -140,7 +134,6 @@
                 resultsDiv.style.display = "block";
             } catch (error) {
                 wordTitle.textContent = "Word not found!";
-                synonymsSection.textContent = "No synonyms available.";
                 wordImage.style.display = "none";
                 attribution.style.display = "none";
                 resultsDiv.style.display = "block";
@@ -157,11 +150,10 @@
     <main>
         <div class="search-bar">
             <input type="text" id="searchInput" placeholder="Search for a word...">
-            <button onclick="searchWord()">🔍</button>
+            <button onclick="searchWord()"></button>
         </div>
         <div id="results" class="results" style="display: none;">
             <h2 id="wordTitle"></h2>
-            <div id="synonymsSection"></div>
             <img id="wordImage" alt="">
             <p id="attribution"></p>
         </div>

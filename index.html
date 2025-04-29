@@ -38,6 +38,12 @@
             text-align: center;
         }
 
+        .search-section h2 {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            color: #007cba;
+        }
+
         .search-bar {
             margin-bottom: 1.5rem;
             display: flex;
@@ -98,7 +104,21 @@
     </style>
     <script>
         async function searchWord() {
-            const query = document.getElementById("searchInput").value.trim().toLowerCase();
+            const query = document.getElementById("wordSearchInput").value.trim().toLowerCase();
+            searchImage(query);
+        }
+
+        async function searchPhrase() {
+            const query = document.getElementById("phraseSearchInput").value.trim().toLowerCase();
+            searchImage(query);
+        }
+
+        async function searchSentence() {
+            const query = document.getElementById("sentenceSearchInput").value.trim().toLowerCase();
+            searchImage(query);
+        }
+
+        async function searchImage(query) {
             const headerImage = document.getElementById("headerImage");
             const resultsDiv = document.getElementById("results");
             const wordTitle = document.getElementById("wordTitle");
@@ -106,9 +126,8 @@
             const attribution = document.getElementById("attribution");
 
             try {
-                // Fetch relevant image from Unsplash API with improved query
                 const unsplashKey = 'nGtdWs1N2VxtT-gXyJ7PsnMHDD2xvafoBGmT0-QFBgA'; // Your Unsplash API key
-                const imageResponse = await fetch(`https://api.unsplash.com/search/photos?query=${query}+context&client_id=${unsplashKey}`);
+                const imageResponse = await fetch(`https://api.unsplash.com/search/photos?query=${query}&client_id=${unsplashKey}`);
                 const imageData = await imageResponse.json();
 
                 if (imageData.results.length > 0) {
@@ -117,10 +136,8 @@
                     wordImage.alt = query;
                     wordImage.style.display = "block";
 
-                    // Switch the main page's image
                     headerImage.src = newImage.urls.small;
 
-                    // Add attribution
                     attribution.innerHTML = `Photo by <a href="${newImage.user.links.html}" target="_blank">${newImage.user.name}</a> on <a href="https://unsplash.com" target="_blank">Unsplash</a>`;
                     attribution.style.display = "block";
                 } else {
@@ -128,11 +145,10 @@
                     attribution.style.display = "none";
                 }
 
-                // Update results section
                 wordTitle.textContent = query.charAt(0).toUpperCase() + query.slice(1);
                 resultsDiv.style.display = "block";
             } catch (error) {
-                wordTitle.textContent = "Word not found!";
+                wordTitle.textContent = "No results found!";
                 wordImage.style.display = "none";
                 attribution.style.display = "none";
                 resultsDiv.style.display = "block";
@@ -144,14 +160,32 @@
     <header>
         <img id="headerImage" src="https://synonym55.wordpress.com/wp-content/uploads/2025/04/img-20250425-wa0007_transformed-1.jpeg" alt="Site Logo">
         <h1>Synonym Dictionary</h1>
-        <p>Find Synonyms, Similar Words, and Pictures as Reference</p>
+        <p>Find Synonyms, Phrases, and Sentences as Reference</p>
     </header>
     <main>
-        <div class="search-bar">
-            <input type="text" id="searchInput" placeholder="Search for a word...">
-            <button onclick="searchWord()">
-                <img src="49116.png" alt="Search Icon" style="width: 20px; height: 20px;">
-            </button>
+        <div class="search-section">
+            <h2>Search for Words, Phrases, or Sentences</h2>
+            <!-- Word Search -->
+            <div class="search-bar">
+                <input type="text" id="wordSearchInput" placeholder="Words..." />
+                <button onclick="searchWord()">
+                    <img src="49116.png" alt="Search Icon" />
+                </button>
+            </div>
+            <!-- Phrase Search -->
+            <div class="search-bar">
+                <input type="text" id="phraseSearchInput" placeholder="Phrases..." />
+                <button onclick="searchPhrase()">
+                    <img src="49116.png" alt="Search Icon" />
+                </button>
+            </div>
+            <!-- Sentence Search -->
+            <div class="search-bar">
+                <input type="text" id="sentenceSearchInput" placeholder="Sentences..." />
+                <button onclick="searchSentence()">
+                    <img src="49116.png" alt="Search Icon" />
+                </button>
+            </div>
         </div>
         <div id="results" class="results" style="display: none;">
             <h2 id="wordTitle"></h2>

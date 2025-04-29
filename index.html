@@ -53,13 +53,12 @@
         }
 
         .search-bar button {
-            padding: 0.5rem 1rem;
-            font-size: 1rem;
+            padding: 0.5rem;
+            font-size: 1.2rem;
             border: none;
-            border-radius: 5px;
-            background: #007cba;
-            color: white;
+            background: transparent;
             cursor: pointer;
+            color: #5c7067;
         }
 
         .filter-buttons {
@@ -67,9 +66,9 @@
         }
 
         .filter-buttons button {
-            margin: 0.5rem;
+            margin: 0.3rem;
             padding: 0.5rem 1rem;
-            font-size: 1rem;
+            font-size: 0.9rem;
             border: none;
             border-radius: 5px;
             background: #5c7067;
@@ -97,38 +96,39 @@
         }
     </style>
     <script>
-        let queryType = "rel_syn"; // Default query type (general synonyms)
-
-        function setQueryType(type) {
-            queryType = type; // Update query type based on selected filter
-        }
-
-        async function searchWord() {
-            const query = document.getElementById("searchInput").value.trim().toLowerCase();
+        async function searchWord(query, pos = "") {
             const headerImage = document.getElementById("headerImage");
             const resultsDiv = document.getElementById("results");
             const wordTitle = document.getElementById("wordTitle");
             const synonyms = document.getElementById("synonyms");
             const wordImage = document.getElementById("wordImage");
             const attribution = document.getElementById("attribution");
+            const filterButtons = document.getElementById("filterButtons");
 
             try {
-                // Fetch synonyms using Datamuse API based on selected query type
-                const synonymResponse = await fetch(`https://api.datamuse.com/words?${queryType}=${query}`);
+                // Guess part of speech or refine based on user input (pos)
+                const synonymResponse = await fetch(`https://api.datamuse.com/words?${pos}=${query}`);
                 if (!synonymResponse.ok) throw new Error("Word not found");
                 const synonymData = await synonymResponse.json();
 
                 // Ensure synonyms are available
                 const synonymList = synonymData.map(item => item.word);
                 if (synonymList.length > 0) {
-                    synonyms.textContent = `Synonyms (${queryType}): ${synonymList.join(", ")}`;
+                    synonyms.textContent = `Synonyms: ${synonymList.join(", ")}`;
                 } else {
                     synonyms.textContent = "No synonyms available.";
                 }
 
+                // Show part-of-speech buttons dynamically
+                filterButtons.innerHTML = `
+                    <button onclick="searchWord('${query}', 'rel_jjb')">Adjectives</button>
+                    <button onclick="searchWord('${query}', 'rel_jja')">Nouns</button>
+                    <button onclick="searchWord('${query}', 'rel_syn')">Verbs</button>
+                `;
+
                 // Fetch relevant image from Unsplash API
                 const unsplashKey = 'nGtdWs1N2VxtT-gXyJ7PsnMHDD2xvafoBGmT0-QFBgA'; // Your Unsplash API key
-                const imageResponse = await fetch(`https://api.unsplash.com/search/photos?query=${query}+${queryType}&client_id=${unsplashKey}`);
+                const imageResponse = await fetch(`https://api.unsplash.com/search/photos?query=${query}&client_id=${unsplashKey}`);
                 const imageData = await imageResponse.json();
                 if (imageData.results.length > 0) {
                     const newImage = imageData.results[0];
@@ -155,6 +155,7 @@
                 synonyms.textContent = "";
                 wordImage.style.display = "none";
                 attribution.style.display = "none";
+                filterButtons.innerHTML = "";
                 resultsDiv.style.display = "block";
             }
         }
@@ -169,13 +170,9 @@
     <main>
         <div class="search-bar">
             <input type="text" id="searchInput" placeholder="Search for a word...">
-            <button onclick="searchWord()">Search</button>
+            <button onclick="searchWord(document.getElementById('searchInput').value)">&#128269;</button> <!-- Search Icon -->
         </div>
-        <div class="filter-buttons">
-            <button onclick="setQueryType('rel_syn')">General Synonyms</button>
-            <button onclick="setQueryType('rel_jjb')">Adjectives</button>
-            <button onclick="setQueryType('rel_jja')">Nouns</button>
-        </div>
+        <div class="filter-buttons" id="filterButtons"></div>
         <div id="results" class="results" style="display: none;">
             <h2 id="wordTitle"></h2>
             <p id="synonyms"></p>

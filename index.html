@@ -107,20 +107,32 @@
 
     async function fetchWordnikData(query) {
       try {
-        const response = await fetch(`https://api.wordnik.com/v4/word.json/${query}/relatedWords?useCanonical=true&relationshipTypes=synonym&limitPerRelationshipType=10&api_key=${WORDNIK_API_KEY}`);
+        const response = await fetch(`https://api.wordnik.com/v4/word.json/${query}/relatedWords?useCanonical=true&limitPerRelationshipType=10&api_key=${WORDNIK_API_KEY}`);
         const data = await response.json();
-        let categorizedSynonyms = {};
+        let categorizedSynonyms = {
+          noun: [],
+          verb: [],
+          adjective: [],
+          adverb: [],
+          other: [],
+        };
 
         if (data && data.length > 0) {
           data.forEach(entry => {
             const partOfSpeech = entry.relationshipType;
-            categorizedSynonyms[partOfSpeech] = entry.words || [];
+            if (categorizedSynonyms[partOfSpeech]) {
+              categorizedSynonyms[partOfSpeech].push(...entry.words);
+            } else {
+              categorizedSynonyms["other"].push(...entry.words);
+            }
           });
         }
 
         let resultText = `<strong>${query}</strong><br>`;
         for (const [pos, words] of Object.entries(categorizedSynonyms)) {
-          resultText += `<strong>${pos.charAt(0).toUpperCase() + pos.slice(1)}</strong>: ${words.join(", ")}<br>`;
+          if (words.length > 0) {
+            resultText += `<strong>${pos.charAt(0).toUpperCase() + pos.slice(1)}</strong>: ${words.join(", ")}<br>`;
+          }
         }
 
         document.getElementById("wordTitle").innerHTML = resultText;

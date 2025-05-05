@@ -105,28 +105,25 @@
       await fetchUnsplashImage(query);
     }
 
-    async function searchPhraseOrSentence() {
-      const query = document.getElementById("phraseSentenceSearchInput").value.trim().toLowerCase();
-      if (!query) return;
-      await fetchUnsplashImage(query);
-    }
-
     async function fetchWordnikData(query) {
       try {
         const response = await fetch(`https://api.wordnik.com/v4/word.json/${query}/relatedWords?useCanonical=true&relationshipTypes=synonym&limitPerRelationshipType=10&api_key=${WORDNIK_API_KEY}`);
         const data = await response.json();
-        let synonyms = [];
+        let categorizedSynonyms = {};
 
         if (data && data.length > 0) {
-          synonyms = data[0].words || [];
+          data.forEach(entry => {
+            const partOfSpeech = entry.relationshipType;
+            categorizedSynonyms[partOfSpeech] = entry.words || [];
+          });
         }
 
-        let resultText = query;
-        if (synonyms.length > 0) {
-          resultText += " - Synonyms: " + synonyms.join(", ");
+        let resultText = `<strong>${query}</strong><br>`;
+        for (const [pos, words] of Object.entries(categorizedSynonyms)) {
+          resultText += `<strong>${pos.charAt(0).toUpperCase() + pos.slice(1)}</strong>: ${words.join(", ")}<br>`;
         }
 
-        document.getElementById("wordTitle").innerText = resultText;
+        document.getElementById("wordTitle").innerHTML = resultText;
       } catch (error) {
         console.error("Error fetching Wordnik data:", error);
       }
@@ -163,12 +160,6 @@
       <div class="search-bar">
         <input type="text" id="wordSearchInput" placeholder="Words...">
         <button onclick="searchWord()">
-          <img src="49116.png" alt="Search Icon">
-        </button>
-      </div>
-      <div class="search-bar">
-        <input type="text" id="phraseSentenceSearchInput" placeholder="Phrases or sentences...">
-        <button onclick="searchPhraseOrSentence()">
           <img src="49116.png" alt="Search Icon">
         </button>
       </div>

@@ -95,15 +95,68 @@
     }
   </style>
   <script>
+    // Triggered when the word search button is clicked
     async function searchWord() {
       const query = document.getElementById("wordSearchInput").value.trim().toLowerCase();
       if (!query) return;
-      searchImage(query);
+      await fetchSynonymsAndImage(query);
     }
+
+    // Triggered when the phrase/sentence search button is clicked
     async function searchPhraseOrSentence() {
       const query = document.getElementById("phraseSentenceSearchInput").value.trim().toLowerCase();
       if (!query) return;
-      searchImage(query);
+      await fetchSynonymsAndImage(query);
+    }
+
+    // Fetch synonyms from Wordnik and then get the most relevant image from Unsplash.
+    async function fetchSynonymsAndImage(query) {
+      // Replace these placeholders with your secure key injection (e.g., from GitHub Secrets via your build process or a proxy).
+      const wordnikApiKey = 'YOUR_WORDNIK_API_KEY_HERE';
+      const unsplashApiKey = 'YOUR_UNSPLASH_API_KEY_HERE';
+
+      let synonyms = [];
+      try {
+        const wordnikUrl = `https://api.wordnik.com/v4/word.json/${encodeURIComponent(query)}/relatedWords?useCanonical=true&relationshipTypes=synonym&limitPerRelationshipType=10&api_key=${wordnikApiKey}`;
+        const synonymResponse = await fetch(wordnikUrl);
+        const synonymsData = await synonymResponse.json();
+        if (synonymsData && synonymsData.length > 0) {
+          // Using the first set of related words (synonyms)
+          synonyms = synonymsData[0].words || [];
+        }
+      } catch (error) {
+        console.error("Error fetching synonyms:", error);
+      }
+      
+      // Try fetching an image using each synonym (and finally the original query)
+      let queriesToTry = [...synonyms, query];
+      let imageUrl = "";
+      let usedQuery = "";
+      for (let term of queriesToTry) {
+        try {
+          const unsplashUrl = `https://api.unsplash.com/search/photos?query=${encodeURIComponent(term)}&client_id=${unsplashApiKey}&per_page=1`;
+          const imageResponse = await fetch(unsplashUrl);
+          const imageData = await imageResponse.json();
+          if (imageData.results && imageData.results.length > 0) {
+            imageUrl = imageData.results[0].urls.regular;
+            usedQuery = term;
+            break;
+          }
+        } catch (error) {
+          console.error(`Error fetching image for term "${term}":`, error);
+        }
+      }
+      
+      // Update the results on the page
+      document.getElementById("wordTitle").innerText =
+        query + (usedQuery && usedQuery !== query ? ` (showing image for '${usedQuery}')` : "");
+      if (imageUrl) {
+        document.getElementById("wordImage").src = imageUrl;
+        document.getElementById("wordImage").style.display = "block";
+      } else {
+        document.getElementById("wordImage").style.display = "none";
+      }
+      document.getElementById("results").style.display = "block";
     }
   </script>
 </head>

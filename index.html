@@ -11,6 +11,7 @@
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
+
     gtag('config', 'G-S0687T9HPQ');
   </script>
 
@@ -124,7 +125,8 @@
         const data = await response.json();
 
         if (data.results.length > 0) {
-          const image = data.results[0]; // Get the first relevant image
+          const image = data.results[0];
+
           document.getElementById("wordImage").src = image.urls.regular;
           document.getElementById("wordImage").style.display = "block";
           document.getElementById("attribution").innerText = `Image by ${image.user.name} on Unsplash`;

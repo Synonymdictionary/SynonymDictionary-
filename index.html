@@ -18,11 +18,19 @@
     body {
       font-family: 'Josefin Sans', sans-serif;
       background-color: #f9f4d7;
+      background-image: url('https://s0.wp.com/wp-content/themes/pub/lowfi/assets/images/texture.png');
+      background-repeat: repeat;
       color: #5c7067;
     }
     header {
       text-align: center;
       padding: 2rem 1rem;
+    }
+    header img {
+      border-radius: 20px;
+      width: 200px;
+      height: auto;
+      object-fit: cover;
     }
     header h1 {
       font-family: 'Amatic SC', cursive;
@@ -59,6 +67,7 @@
 </head>
 <body>
   <header>
+    <img id="headerImage" src="https://synonym55.wordpress.com/wp-content/uploads/2025/04/img-20250425-wa0007_transformed-1.jpeg" alt="Site Logo">
     <h1>Synonym Dictionary</h1>
     <p>Get synonyms, paraphrases, and alternatives to words, phrases, and sentences</p>
   </header>
@@ -79,7 +88,7 @@
 
   <script>
     const WORDNIK_API_KEY = "l0ncegqqjs64oga4k7npd36jv9g2bq5o8auhxmiajd8xhgifg";
-    const UNSPLASH_ACCESS_KEY = "YOUR_UNSPLASH_API_KEY";
+    const UNSPLASH_ACCESS_KEY = "nGtdWs1N2VxtT-gXyJ7PsnMHDD2xvafoBGmT0-QFBgA";
 
     async function searchWord() {
       const query = document.getElementById("wordSearchInput").value.trim().toLowerCase();

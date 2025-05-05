@@ -95,63 +95,60 @@
     }
   </style>
   <script>
-    // Called when the Word search button is clicked.
     async function searchWord() {
       const query = document.getElementById("wordSearchInput").value.trim().toLowerCase();
       if (!query) return;
-      await fetchSynonymsAndImage(query);
+      await fetchWordnikData(query);
+      await fetchUnsplashImage(query);
     }
-    
-    // Called when the phrase/sentence search button is clicked.
+
     async function searchPhraseOrSentence() {
       const query = document.getElementById("phraseSentenceSearchInput").value.trim().toLowerCase();
       if (!query) return;
-      await fetchSynonymsAndImage(query);
+      await fetchUnsplashImage(query);
     }
-    
-    // Basic function: fetch synonyms from Wordnik and fetch image from Unsplash using the original query.
-    async function fetchSynonymsAndImage(query) {
-      // Replace these placeholders with your secure key references.
-      const wordnikApiKey = 'YOUR_WORDNIK_API_KEY_HERE';
-      const unsplashApiKey = 'YOUR_UNSPLASH_API_KEY_HERE';
-    
-      let synonyms = [];
+
+    async function fetchWordnikData(query) {
+      const wordnikApiKey = '${{ secrets.WORDNIK_API_KEY }}'; // Fetching from GitHub Secrets
+
       try {
-        const wordnikUrl = `https://api.wordnik.com/v4/word.json/${encodeURIComponent(query)}/relatedWords?useCanonical=true&relationshipTypes=synonym&limitPerRelationshipType=10&api_key=${wordnikApiKey}`;
-        const synonymResponse = await fetch(wordnikUrl);
-        const synonymsData = await synonymResponse.json();
-        if (Array.isArray(synonymsData) && synonymsData.length > 0) {
-          synonyms = synonymsData[0].words || [];
+        const response = await fetch(`https://api.wordnik.com/v4/word.json/${query}/relatedWords?useCanonical=true&relationshipTypes=synonym&limitPerRelationshipType=10&api_key=${wordnikApiKey}`);
+        const data = await response.json();
+        let synonyms = [];
+
+        if (data && data.length > 0) {
+          synonyms = data[0].words || [];
         }
+
+        let resultText = query;
+        if (synonyms.length > 0) {
+          resultText += " - Synonyms: " + synonyms.join(", ");
+        }
+
+        document.getElementById("wordTitle").innerText = resultText;
       } catch (error) {
-        console.error("Error fetching synonyms:", error);
+        console.error("Error fetching Wordnik data:", error);
       }
-    
-      let imageUrl = "";
+    }
+
+    async function fetchUnsplashImage(query) {
+      const unsplashApiKey = '${{ secrets.UNSPLASH_API_KEY }}'; // Fetching from GitHub Secrets
+
       try {
-        const unsplashUrl = `https://api.unsplash.com/search/photos?query=${encodeURIComponent(query)}&client_id=${unsplashApiKey}&per_page=1`;
-        const imageResponse = await fetch(unsplashUrl);
-        const imageData = await imageResponse.json();
-        if (imageData && imageData.results && imageData.results.length > 0) {
-          imageUrl = imageData.results[0].urls.regular;
+        const response = await fetch(`https://api.unsplash.com/search/photos?query=${query}&client_id=${unsplashApiKey}&per_page=1`);
+        const data = await response.json();
+
+        if (data.results && data.results.length > 0) {
+          document.getElementById("wordImage").src = data.results[0].urls.regular;
+          document.getElementById("wordImage").style.display = "block";
+        } else {
+          document.getElementById("wordImage").style.display = "none";
         }
+
+        document.getElementById("results").style.display = "block";
       } catch (error) {
-        console.error("Error fetching image:", error);
+        console.error("Error fetching Unsplash image:", error);
       }
-    
-      // Update the page with the retrieved information.
-      let resultText = query;
-      if (synonyms.length > 0) {
-        resultText += " - Synonyms: " + synonyms.join(", ");
-      }
-      document.getElementById("wordTitle").innerText = resultText;
-      if (imageUrl) {
-        document.getElementById("wordImage").src = imageUrl;
-        document.getElementById("wordImage").style.display = "block";
-      } else {
-        document.getElementById("wordImage").style.display = "none";
-      }
-      document.getElementById("results").style.display = "block";
     }
   </script>
 </head>

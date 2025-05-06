@@ -11,7 +11,6 @@
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
-
     gtag('config', 'G-S0687T9HPQ');
   </script>
 
@@ -82,7 +81,9 @@
     </div>
     <div id="results" class="results" style="display: none;">
       <h2 id="wordTitle"></h2>
-      <img id="wordImage" alt="" style="display: none;">
+      <a id="wordImageLink" target="_blank">
+        <img id="wordImage" alt="" style="display: none;">
+      </a>
       <p id="attribution"></p>
     </div>
   </main>
@@ -129,7 +130,10 @@
 
           document.getElementById("wordImage").src = image.urls.regular;
           document.getElementById("wordImage").style.display = "block";
-          document.getElementById("attribution").innerText = `Image by ${image.user.name} on Unsplash`;
+          document.getElementById("wordImageLink").href = image.links.html;
+          document.getElementById("wordImageLink").setAttribute("download", image.links.download_location);
+
+          document.getElementById("attribution").innerHTML = `Photo by <a href="${image.user.links.html}" target="_blank">${image.user.name}</a> on <a href="https://unsplash.com/" target="_blank">Unsplash</a>`;
           document.getElementById("attribution").style.display = "block";
         } else {
           console.warn("No images found for this search term.");

@@ -81,6 +81,7 @@
     </div>
     <div id="results" class="results" style="display: none;">
       <h2 id="wordTitle"></h2>
+      <p id="synonyms"></p>
     </div>
   </main>
 
@@ -90,27 +91,30 @@
     async function searchWord() {
       const query = document.getElementById("wordSearchInput").value.trim().toLowerCase();
       if (!query) return;
-      await fetchWordnikData(query);
+      await fetchWordnikSynonyms(query);
     }
 
-    async function fetchWordnikData(query) {
+    async function fetchWordnikSynonyms(query) {
       try {
         const response = await fetch(`https://api.wordnik.com/v4/word.json/${query}/relatedWords?useCanonical=true&relationshipTypes=synonym&limitPerRelationshipType=10&api_key=${WORDNIK_API_KEY}`);
         const data = await response.json();
 
-        let categorizedSynonyms = {};
+        let synonyms = [];
         data.forEach(entry => {
-          categorizedSynonyms[entry.relationshipType] = entry.words;
+          if (entry.relationshipType === "synonym") {
+            synonyms = entry.words;
+          }
         });
 
         document.getElementById("wordTitle").innerText = query;
-        document.getElementById("results").innerHTML = Object.entries(categorizedSynonyms)
-          .map(([pos, words]) => `<strong>${pos.charAt(0).toUpperCase() + pos.slice(1)}</strong>: ${words.join(", ")}`)
-          .join("<br>");
+        document.getElementById("synonyms").innerHTML = synonyms.length 
+          ? `<strong>Synonyms:</strong> ${synonyms.join(", ")}`
+          : "No synonyms found.";
+
         document.getElementById("results").style.display = "block";
 
       } catch (error) {
-        console.error("Error fetching Wordnik data:", error);
+        console.error("Error fetching synonyms:", error);
       }
     }
   </script>
